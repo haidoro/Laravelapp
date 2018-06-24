@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('hello/{msg}', function ($msg) {
+	return "<html><body><h1>{$msg}</h1></body></html>";
+});

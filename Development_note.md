@@ -33,7 +33,7 @@ artisan serveを停止するには「コントロールキー＋C」
 ## ルーティングとコントローラー
 ルーティングはURLアドレスに対してどのような処理を行うかを管理する仕組みです。
 例
-`localhost:8000/webapp/hello.html`のアドレスを入れるとhello.htmlファイルが表示される仕組みです。
+`localhost:8000/webapp/hello`のアドレスを入れるとhello.htmlファイルが表示される仕組みです。
 単純な静的なページならハイパーリンクで設定するだけですが、laravelではそのアドレスに対して実行するプログラムを設定する必要があります。
 
 ### Laravelのルーティングの仕組み
@@ -59,5 +59,33 @@ Route::get('/', function () {
 
 ### テンプレートの場所
 welcomeテンプレートの場所は「resource/views」フォルダに「welcome.blade.php」ファイルとして用意されています。
-テンプレートの作成方法は後ほど学習するとしてファイルの場所を覚えておきましょ。
+テンプレートの作成方法は後ほど学習するとしてファイルの場所を覚えておきましょう。
+
+### Helloの表示
+ルーティングファイルの「web.php」ファイルを少し編集してみます。以下のように記述を追加します。  
+`localhost:8000/hello`とURLを入力するとHelloと表示させます。
+
+web.php
+```
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('hello/', function () {
+	return "<html><body><h1>Hello</h1></body></html>";
+});
+```
+#### Rout::getのパラメータについて
+URL指定にパラメータを追加することでそのパラメータを表示させることができます。
+
+web.php
+```
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('hello/{msg}', function ($msg) {
+	return "<html><body><h1>{$msg}</h1></body></html>";
+});
+```
+URLを`localhost:8000/hello/Hello,world!`と入力すると
+Hello,world!と表示されます。
 
