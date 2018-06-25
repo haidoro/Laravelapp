@@ -59,7 +59,7 @@ Route::get('/', function () {
 
 ** `view('welcome')`関数を呼び出すのに無名関数を使うことでクロージャーを活用している点に着目 **
 
-### Helloの表示(Banch hello)
+### Helloの表示(Git Branch hello)
 ルーティングファイルの「web.php」ファイルを少し編集してみます。以下のように記述を追加します。  
 `localhost:8000/hello`とURLを入力するとHelloと表示させます。
 
@@ -91,7 +91,7 @@ Hello,world!と表示されます。
 welcomeテンプレートの場所は「resource/views」フォルダに「welcome.blade.php」ファイルとして用意されています。
 テンプレートの作成方法は後ほど学習するとしてファイルの場所を覚えておきましょ。
 
-## Controllerの使い方(Branch controller)
+## Controllerの使い方(Git Branch controller)
 ###Controllerの作成
 以下コマンドでHelloControllerを作成します。
 ```
@@ -280,11 +280,167 @@ Route::get('name/{first_name?}/{second_name?}', 'HelloController@index');
 Route::get('hello/other', 'HelloController@other');
 ```
 
-## テンプレート作成
+## テンプレート作成(Git Branch template)
+簡単なテンプレート作成を行います。
+1. テンプレート用のフォルダは「resources/views」の中に作成します。一般的にはさらにその中にフォルダを作成してその中にテンプレートをおきます。
+`resources/views/hello`フォルダにテンプレートを置くことにします。
+2. 今回はテンプレートの関連を見るだけですので、テンプレートの内容は簡単なHTMLを記述します。
+テンプレートファイル名index.php
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Index</h1>
+	<p>this is a sample page with php-template.</p>
+</body>
+</html>
+```
 
+3.ルートの設定を行います。  
+テンプレートの指定はviewメソッドで行います。フォルダ名とファイル名をドットでつなぎ引数とします。
+```
+Route::get('hello', function () {
+    return view('hello.index');
+});
+```
 
+## コントローラでテンプレートを使う
 
+HelloController.php
+```
+<?php
 
+namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 
+class HelloController extends Controller
+{
+    public function index(){
+    	return view('hello.index');
+    }
+}
+```
 
+web.php
+```
+Route::get('hello', 'HelloController@index');
+```
+## コントローラーからテンプレートへ値の受け渡し
+コントローラーからテンプレート側へ単純なデータの受け渡し方法。  
+変数$msgを使います。
+
+index.php
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Index</h1>
+	<p><?php echo $msg; ?></p>
+	<p><?php echo date("Y年n月j日"); ?></p>
+</body>
+</html>
+```
+
+HelloController.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index(){
+    	$date = ['msg'=>'これはコントローラーから渡されたメッセージです。'];
+    	return view('hello.index',$date);
+    }
+}
+```
+### ルートパラメータをテンプレートに渡す
+
+HelloController.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index($id='zero'){
+    	$date = [
+    		'msg'=>'これはコントローラーから渡されたメッセージです。',
+    		'id'=>$id
+    	];
+    	return view('hello.index',$date);
+    }
+}
+```
+
+index.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index($id='zero'){
+    	$data = [
+    		'msg'=>'これはコントローラーから渡されたメッセージです。',
+    		'id'=>$id
+    	];
+    	return view('hello.index',$data);
+    }
+}
+```
+
+web.php
+```
+Route::get('hello/{id?}', 'HelloController@index');
+```
+URLは以下のようにする。  
+`http://localhost:8000/hello/aa`
+
+### クエリー文字列の使用
+
+HelloController.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index(Request $request){
+    	$data = [
+    		'msg'=>'これはコントローラーから渡されたメッセージです。',
+    		'id'=>$request -> id
+    	];
+    	return view('hello.index',$data);
+    }
+}
+```
+
+web.php
+```
+Route::get('hello', 'HelloController@index');
+```
+
+URLは以下のようにする。  
+`http://localhost:8000/hello/?id=sample`
