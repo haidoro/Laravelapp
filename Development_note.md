@@ -446,3 +446,42 @@ Route::get('hello', 'HelloController@index');
 
 URLは以下のようにする。  
 `http://localhost:8000/hello/?id=sample`
+
+## Bladeテンプレート追加
+BladeはシンプルながらパワフルなLaravelのテンプレートエンジンです。
+ファイル名は`index.blade.php`のように拡張子の前に`.blade`を付けます。
+resources/views/hello/index.blade.phpファイル作成
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Bladeを使ったIndex</h1>
+	<p>{{$msg}}</p>
+</body>
+</html>
+```
+app/Http/Controllers/HelloController.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index(){
+    	$data = [
+    		'msg'=>'これはBladeを利用したメッセージです。',
+    	];
+    	return view('hello.index',$data);
+    }
+}
+```
+
+## フォームの作成
+
