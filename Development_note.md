@@ -1,6 +1,8 @@
 # Laravel 開発ノート
 Laravelを導入するとXAMMPなどの仮想サーバーは必要ありません。ローカルの好きな場所にプロジェクトフォルダを作成して始めることができます。
 
+* Macでの開発例です。
+
 ## MacにComposerを導入
 Homebrewが導入済みであること。
 Composerを探します。
@@ -55,7 +57,7 @@ Route::get('/', function () {
 `static`の特徴はインスタンス化しなくても直接クラスのstaticメソッドやstaticプロパティを`::`で呼び出すことができることです。  
 ここではRoutクラスのget()メソッドを呼び出しています。
 
-`view('welcome')`関数は引数に指定されたテンプレートを表示するものです。ここではwelcomeテンプレートを指しています。
+`view('welcome')`関数は引数に指定されたテンプレートを表示するものです。ここではresource/views/welcome.blade.phpテンプレートを指しています。bladeと拡張子のphpは記述しません。
 
 ** `view('welcome')`関数を呼び出すのに無名関数を使うことでクロージャーを活用している点に着目 **
 
