@@ -485,3 +485,57 @@ class HelloController extends Controller
 
 ## フォームの作成
 
+resources/views/hello/index.blade.php
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Bladeを使ったIndex</h1>
+	<p>{{$msg}}</p>
+	<form action="/hello" method="post">
+		{{ csrf_field() }}
+		<input type="text" name="msg">
+		<input type="submit">
+	</form>
+</body>
+</html>
+```
+
+app/Http/Controllers/HelloController.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index(){
+    	$data = [
+    		'msg'=>'これはBladeを利用したメッセージです。',
+    	];
+    	return view('hello.index',$data);
+    }
+    public function post(Request $request)
+    {
+      $msg = $request->msg;
+      $data = [
+        'msg'=>'こんにちは'.$msg.'さん。',
+      ];
+      return view('hello.index',$data);
+    }
+}
+```
+
+routes/web.php
+```
+Route::get('/', function(){
+  return view('welcome');
+});
+Route::post('hello', 'HelloController@post');
+```
