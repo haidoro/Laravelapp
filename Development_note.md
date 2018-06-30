@@ -271,7 +271,7 @@ EOF;
 ```
 ルーティングも変更します。
 `index()`アクションの第1引数`hello`を`name`に変更しました。
-ここが`hello`のままだと`http://localhost:8000/hello/masaharu/tahara`では問題なく表示されますが、`http://localhost:8000/hello/other`としてもother部分を引数と認識してしまい。`index()`アクションのページが開かれて、名前のところにotherが表示されてしまいます。
+`http://localhost:8000/name/masaharu/tahara`では問題なく表示されますが、`http://localhost:8000/name/other`としてもother部分を引数と認識してしまい。`index()`アクションのページが開かれて、名前のところにotherが表示されてしまいます。
 
 web.php
 ```
@@ -446,3 +446,12 @@ Route::get('hello', 'HelloController@index');
 
 URLは以下のようにする。  
 `http://localhost:8000/hello/?id=sample`
+
+## Bladeテンプレート作成
+resources/views/hello/index.blade.phpの作成
+
+```
+
+```
+
+## フォームの利用
