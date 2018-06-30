@@ -551,7 +551,7 @@ Route::post('hello', 'HelloController@post');
 ```
 
 ## Bladeの構文
-@if文
+@if文の例
 resources/views/hello/index.blade.php
 ```
 <!DOCTYPE html>
@@ -602,3 +602,54 @@ class HelloController extends Controller
 
 `http://localhost:8000/hello`で未入力なら「何か書いて下さい。」と表示され、`tahara`と入力すると「こんにちは、taharaさん。」と表示されます。
 
+## ループ
+
+foreach文の例
+
+resources/views/hello/index.blade.php
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+   <h1>Blade/Index</h1>
+   
+   <ol>
+	@foreach($data as $item)
+	<li>{{$item}}</li>
+	@endforeach
+   </ol>	
+</body>
+
+</html>
+```
+
+app/Http/Controller/HelloController.php
+```
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+  
+   public function index()
+   {
+       $data = ['AAA','BBB','CCC','DDD'];
+       return view('hello.index', ['data'=>$data]);
+   }
+
+}
+```
+
+POSTが例から無くなったのでルーティングをgetに戻した。
+routes/web.php
+```
+Route::get('/', function(){
+  return view('welcome');
+});
+Route::get('hello', 'HelloController@index');
+```
