@@ -483,3 +483,60 @@ class HelloController extends Controller
 URLは`http://localhost:8000/hello`
 
 ## フォームの利用
+resources/views/hello/index.blade.php
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Blade/Index</h1>
+	<p>{{$msg}}</p>
+	<form action="/hello" method="POST">
+	{{ csrf_field() }}
+	<input type="text" name="msg">
+	<input type="submit">
+	</form>
+</body>
+</html>
+```
+
+app/Http/Controller/HelloController.php
+```
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index(){
+    	$data = [
+    		'msg'=>'お名前を入力してください。',
+    	];
+    	return view('hello.index',$data);
+    }
+     public function post(Request $request){
+     	$msg = $request->msg;
+     	$data = [
+    		'msg'=>'こんにちは'.$msg.'さん。',
+    	];
+    	return view('hello.index',$data);
+     }
+}
+```
+
+ルートにpostを付け加えます。
+**`Route::get('hello', 'HelloController@index');`**
+は残したままにします。これを削除するとエラーになります。
+
+routes/web.php
+```
+Route::get('/', function(){
+  return view('welcome');
+});
+Route::get('hello', 'HelloController@index');
+Route::post('hello', 'HelloController@post');
+```
+
