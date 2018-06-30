@@ -540,3 +540,55 @@ Route::get('hello', 'HelloController@index');
 Route::post('hello', 'HelloController@post');
 ```
 
+## Bladeの構文
+@if文
+resources/views/hello/index.blade.php
+```
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+   <h1>Blade/Index</h1>
+   @if ($msg != '')
+   <p>こんにちは、{{$msg}}さん。</p>
+   @else
+   <p>何か書いて下さい。</p>
+   @endif
+   <form method="POST" action="/hello">
+       {{ csrf_field() }}
+       <input type="text" name="msg">
+       <input type="submit">
+   </form>
+</body>
+
+</html>
+```
+
+app/Http/Controller/HelloController.php
+```
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+  
+   public function index()
+   {
+       return view('hello.index', ['msg'=>'']);
+   }
+
+   public function post(Request $request)
+   {
+       return view('hello.index', ['msg'=>$request->msg]);
+   }
+
+}
+
+```
+
+`http://localhost:8000/hello`で未入力なら「何か書いて下さい。」と表示され、`tahara`と入力すると「こんにちは、taharaさん。」と表示されます。
+
