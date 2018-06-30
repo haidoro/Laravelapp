@@ -1,28 +1,38 @@
 # Laravel 開発ノート
-Laravelを導入するとXAMMPなどの仮想サーバーは必要ありません。ローカルの好きな場所にプロジェクトフォルダを作成して始めることができます。
-
 * Macでの開発例です。
+PHPとデータベースの使える環境にプロジェクトフォルダを作成しておきます。
 
-## MacにComposerを導入
-Homebrewが導入済みであること。
-Composerを探します。
+## Composerの導入方法
+### Composerについて
+ComposerはPHPのパッケージ管理プログラムです。
+Node.jsのNPMのようなものと考えれば良いです。  
+* [Composerはこちらにあります。](https://getcomposer.org/)
+
+### MacにComposerを導入
+
+* Homebrewが導入済みであること。
+
+HomebrewでComposerを探します。
 ```
 brew search composer
 ```
-Composerの導入。
+Composerが確認できたら、次のコマンドでComposerのインストール。
 ```
 brew install composer
 ```
-Composerバージョン確認
+
+Composerバージョン確認してバージョン番号が返ってくれば正常にインストールできたか確認できます。
 ```
 composer -V
 ```
-最初にComposerを使用し、Laravelインストーラをダウンロードします。
+
+次にComposerを使用し、Laravelインストーラをダウンロードします。
 ```
 composer global require "laravel/installer"
 ```
-ターミナルでComposerのcreate-projectコマンドを実行し、Laravelをインストール
-この場合はlaravelappフォルダにlaravelをインストール
+ターミナルでComposerのcreate-projectコマンドを実行し、Laravelをインストール。
+
+今回はlaravelappフォルダにlaravelをインストール
 ```
 composer create-project --prefer-dist laravel/laravel laravelapp"
 ```
@@ -35,10 +45,13 @@ artisan serveを停止するには「コントロールキー＋C」
 色々なフォルダやファイルができますが、まず必要なフォルダは「app」、「routes」、「resources」の3つのフォルダ内のファイルです。
 
 ## ルーティングとコントローラー
+
+### ルーティングの仕組み
 ルーティングはURLアドレスに対してどのような処理を行うかを管理する仕組みです。
-例
-`localhost:8000/webapp/hello.html`のアドレスを入れるとhello.htmlファイルが表示される仕組みです。
+例　次のURLの意味を考えて見ましょう。
+`localhost:8000/webapp/hello.html`通常の静的なページなら、アドレスを入れると「webappフォルダ」の「hello.htmlファイル」が表示される仕組みです。
 単純な静的なページならハイパーリンクで設定するだけですが、laravelではそのアドレスに対して実行するプログラムを設定する必要があります。
+その役割をするものがルーティングになります。
 
 ### Laravelのルーティングの仕組み
 「routes」フォルダの「web.php」ファイルにルーティングの処理情報があります。
@@ -57,15 +70,15 @@ Route::get('/', function () {
 `static`の特徴はインスタンス化しなくても直接クラスのstaticメソッドやstaticプロパティを`::`で呼び出すことができることです。  
 ここではRoutクラスのget()メソッドを呼び出しています。
 
-`view('welcome')`関数は引数に指定されたテンプレートを表示するものです。ここではresource/views/welcome.blade.phpテンプレートを指しています。bladeと拡張子のphpは記述しません。
+`view('welcome')`関数は引数に指定されたテンプレートを表示するものです。ここでは`resource/views/welcome.blade.php`テンプレートを指しています。bladeと拡張子のphpは記述しません。
 
 ** `view('welcome')`関数を呼び出すのに無名関数を使うことでクロージャーを活用している点に着目 **
 
 ### Helloの表示(Git Branch hello)
-ルーティングファイルの「web.php」ファイルを少し編集してみます。以下のように記述を追加します。  
 `localhost:8000/hello`とURLを入力するとHelloと表示させます。
+そのためには、ルーティングファイルの「web.php」ファイルを少し編集します。  
 
-web.php
+routes/web.php
 ```
 Route::get('/', function () {
     return view('welcome');
@@ -77,7 +90,7 @@ Route::get('hello/', function () {
 #### Rout::getのパラメータについて
 URL指定にパラメータを追加することでそのパラメータを表示させることができます。
 
-web.php
+routes/web.php
 ```
 Route::get('/', function () {
     return view('welcome');
@@ -288,6 +301,7 @@ Route::get('hello/other', 'HelloController@other');
 `resources/views/hello`フォルダにテンプレートを置くことにします。
 2. 今回はテンプレートの関連を見るだけですので、テンプレートの内容は簡単なHTMLを記述します。
 テンプレートファイル名index.php
+resources/views/hello/index.php
 ```
 <!DOCTYPE html>
 <html lang="ja">
@@ -390,24 +404,20 @@ class HelloController extends Controller
 }
 ```
 
-index.php
+resources/views/hello/index.php
 ```
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class HelloController extends Controller
-{
-    public function index($id='zero'){
-    	$data = [
-    		'msg'=>'これはコントローラーから渡されたメッセージです。',
-    		'id'=>$id
-    	];
-    	return view('hello.index',$data);
-    }
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Index</h1>
+	<p><?php echo $msg; ?></p>
+	<p>ID = <?php echo $id; ?></p>
+</body>
+</html>
 ```
 
 web.php
