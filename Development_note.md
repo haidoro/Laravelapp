@@ -451,7 +451,35 @@ URLは以下のようにする。
 resources/views/hello/index.blade.phpの作成
 
 ```
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Blade/Index</h1>
+	<p>{{$msg}}</p>
+</body>
+</html>
 ```
+
+app/Http/Controller/HelloController.php
+```
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HelloController extends Controller
+{
+    public function index(){
+    	$data = [
+    		'msg'=>'これはBladeを利用したメッセージです。',
+    	];
+    	return view('hello.index',$data);
+    }
+}
+```
+URLは`http://localhost:8000/hello`
 
 ## フォームの利用
