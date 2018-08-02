@@ -1,50 +1,75 @@
 # Laravel 開発ノート
-Laravelを導入するとXAMMPなどの仮想サーバーは必要ありません。ローカルの好きな場所にプロジェクトフォルダを作成して始めることができます。
-
 * Macでの開発例です。
+## 開発手順
+1. プロジェクトの作成
+2. プロフラムの作成
+3. サーバーの実行
+4. デプロイする
 
 ## MacにComposerを導入
+
 Homebrewが導入済みであること。
 Composerを探します。
+
 ```
 brew search composer
 ```
+
 Composerの導入。
+
 ```
 brew install composer
 ```
+
 Composerバージョン確認
+
 ```
 composer -V
 ```
-最初にComposerを使用し、Laravelインストーラをダウンロードします。
+## Laravelインストール
+
+最初にComposerで、Laravelインストーラをダウンロードします。
+
 ```
 composer global require "laravel/installer"
 ```
-ターミナルでComposerのcreate-projectコマンドを実行し、Laravelをインストール
-この場合はlaravelappフォルダにlaravelをインストール
+
+次に`create-project`コマンドを実行し、Laravelをインストール  
+今回はlaravelappフォルダにlaravelをインストールします。
+
 ```
 composer create-project --prefer-dist laravel/laravel laravelapp"
 ```
+
 `cd`でlaravelappフォルダに移動して次のコマンドで「http://localhost:8000/」で初期画面が表示
+
+***Laravel開発時には次のコマンドはよく使いますので覚えておきましょう。***
+
 ```
 php artisan serve
 ```
+### サーバー停止
+
 artisan serveを停止するには「コントロールキー＋C」
 
-色々なフォルダやファイルができますが、まず必要なフォルダは「app」、「routes」、「resources」の3つのフォルダ内のファイルです。
+Laravelをインストールすると、色々なフォルダやファイルができますが、まず必要なフォルダは「app」、「routes」、「resources」の3つのフォルダ内のファイルです。
 
 ## ルーティングとコントローラー
+
 ルーティングはURLアドレスに対してどのような処理を行うかを管理する仕組みです。
-例
-`localhost:8000/webapp/hello.html`のアドレスを入れるとhello.htmlファイルが表示される仕組みです。
+
+例えば、ブラウザに`localhost:8000/webapp/hello.html`のアドレスを入れるとhello.htmlファイルが表示される仕組みです。
+
 単純な静的なページならハイパーリンクで設定するだけですが、laravelではそのアドレスに対して実行するプログラムを設定する必要があります。
 
 ### Laravelのルーティングの仕組み
+
 「routes」フォルダの「web.php」ファイルにルーティングの処理情報があります。
+
 インストールしたばかりの状態では、この中にはルート情報のみ記載されています。
 
-web.php(コメントアウト部分は省略)
+web.phpコード
+
 ```
 <?php
 Route::get('/', function () {
@@ -53,8 +78,9 @@ Route::get('/', function () {
 ```
 
 ルート情報は`Rout::get(アドレス,関数)`で記述されます。
+
 `::`はPHPではダブルコロンと呼ばれ、静的(static)メソッドや静的(static)プロパティを呼び出すときに使用されるものです。  
-`static`の特徴はインスタンス化しなくても直接クラスのstaticメソッドやstaticプロパティを`::`で呼び出すことができることです。  
+`static`の特徴はインスタンス化しなくても直接クラスのstaticメソッドやstaticプロパティを`::`で呼び出すことができることです。    
 ここではRoutクラスのget()メソッドを呼び出しています。
 
 `view('welcome')`関数は引数に指定されたテンプレートを表示するものです。ここではresource/views/welcome.blade.phpテンプレートを指しています。bladeと拡張子のphpは記述しません。
